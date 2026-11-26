@@ -99,7 +99,7 @@ jobs:
           fi
           scripts/pack/make-release.sh "${BOARD_ID}" "${VERSION}" "artifacts/${BOARD_ID}"
           cp "build-${BOARD_ID}.log" "artifacts/${BOARD_ID}/"
-          ( cd "artifacts/${BOARD_ID}" && sha256sum * > SHA256SUMS )
+          ( cd "artifacts/${BOARD_ID}" && rm -f SHA256SUMS && sha256sum * > SHA256SUMS )
           cat "artifacts/${BOARD_ID}/SHA256SUMS"
 
       - name: Upload firmware

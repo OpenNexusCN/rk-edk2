@@ -150,14 +150,14 @@ MAC/序列号/密钥等重要信息始终可写。
 EOF
 
 # Component checksums (inside the package tarball).
-( cd "${PKG}" && sha256sum * > SHA256SUMS )
+( cd "${PKG}" && rm -f SHA256SUMS && sha256sum * > SHA256SUMS )
 
 tar -C "${WORK}" -czf "${OUT_DIR}/rk-edk2-v${VERSION}-${BOARD}.tar.gz" \
   "rk-edk2-v${VERSION}-${BOARD}"
 
 cp "${PKG}/README.txt" "${PKG}/RELEASE_NOTES.md" "${OUT_DIR}/"
 
-( cd "${OUT_DIR}" && sha256sum * > SHA256SUMS )
+( cd "${OUT_DIR}" && rm -f SHA256SUMS && sha256sum * > SHA256SUMS )
 
 echo "Release package written to ${OUT_DIR}"
 ls -lh "${OUT_DIR}"
