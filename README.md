@@ -23,6 +23,9 @@ Rockchip RK 系列板卡的 EDK2 UEFI 固件，分层支持多 SoC / 多板卡�
 
 > P0 当前只包含 SEC/DXE/串口 Shell，尚无显示、存储、ACPI、USB。
 > 首次上板请按 [docs/bringup.md](docs/bringup.md) 执行。
+>
+> **安全边界**：固件不写 eFuse/OTP、不熔断 CPU 保险丝、不启用 Secure Boot，
+> FV/Flash 保持可写，确保 MAC、序列号、密钥等重要信息始终可写。
 
 ## 预编译固件
 

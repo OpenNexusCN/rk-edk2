@@ -115,3 +115,11 @@ sudo dd if=trust.img of=/dev/sdX bs=512 seek=24576 conv=notrunc
 - 变量为 RAM 模拟，断电丢失。
 - UART 固定 8N1；`PcdUartDefaultParity/StopBits` 的非零值仅用于满足
   ArmPkg BDS 的静态断言，不改变线格式。
+
+## 7. 安全边界：不熔断 CPU 保险丝
+
+- 固件不读写 eFuse/OTP，不熔断 CPU 保险丝，不启用 Secure Boot。
+- 不写保护 FV、eMMC/SPI、vendor storage 或 OTP 区域。
+- 目的：始终保留 MAC、序列号、密钥等一次性区域的写入能力。
+- CI 通过 `scripts/ci/check-no-fuse-lock.sh` 和
+  `scripts/ci/check-fv-locks.py` 强制检查。

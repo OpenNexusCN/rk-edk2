@@ -83,6 +83,11 @@ jobs:
       - name: Generate DTB
         run: scripts/gen-dtb.sh "${{ matrix.board }}" "out/${{ matrix.board }}"
 
+      - name: Safety guards (fuses untouched, FV writable)
+        run: |
+          scripts/ci/check-no-fuse-lock.sh
+          python3 scripts/ci/check-fv-locks.py Build/*/DEBUG_GCC/FV/*.Fv
+
       - name: Package release
         run: |
           source "configs/boards/${{ matrix.board }}.conf"

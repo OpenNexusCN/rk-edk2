@@ -49,7 +49,22 @@
 7. 所有板卡参考代码归档到 `demo/`；设计文档在 `docs/` 维护。
 8. 目标 OS：发行版 Ubuntu arm64（DT）+ Windows arm64（ACPI）；ACPI/DT 两套表同时安装。
 
-### 1.4 设计原则
+### 1.4 禁止熔断 CPU 保险丝 / 写锁（强制）
+
+- 固件、打包脚本、CI **不得以任何形式写 eFuse/OTP**，不得熔断 CPU 保险丝，
+  不得启用 Secure Boot 的 OTP 位。
+- 不调用 `rk_sign_tool`、`SecureBootConsole`、`upgrade_tool` 的 fuse 命令等
+  写号/签名工具。
+- 目的：保留 MAC、序列号、未来密钥等一次性区域的写入能力；eFuse 熔断不可逆。
+- FV 属性也不设置 `LOCK_CAP`/`LOCK_STATUS`/`WRITE_LOCK_*`/`READ_LOCK_*`，
+  保持固件可写；`WRITE_ENABLED_CAP`、`WRITE_STATUS` 必须为 1。
+- 后续实现 eMMC 时，不得设置 boot partition write-protect（BOOT_WP）。
+- CI 强制检查：
+  - `scripts/ci/check-no-fuse-lock.sh`：源码/脚本/工作流中不得出现 eFuse/OTP
+    写入或 Secure Boot 开启引用；
+  - `scripts/ci/check-fv-locks.py`：FV 头不得带锁位，且必须可写。
+
+### 1.5 设计原则
 
 - **分层解耦**：SoC 无关 IP 驱动 / SoC 相关时钟与 PHY / 板级数据与上电时序，三层严格单向依赖。
 - **板卡可扩展**：新增板卡只新增 `Platform/<Vendor>/<Board>` 目录和一份配置，不改公共驱动。

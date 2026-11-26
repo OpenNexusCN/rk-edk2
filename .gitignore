@@ -11,6 +11,10 @@ out/
 *.dtb
 *.img
 
+# 参考固件里已验证的启动镜像（打包 v0.0.1 需要）
+!demo/upstream/rk3399-edk2/Rk3399Pkg/Tools/Bin/idbloader.img
+!demo/upstream/rk3399-edk2/Rk3399Pkg/Tools/Bin/trust.img
+
 # 外部依赖（由脚本/子模块获取）
 /edk2/
 /.deps/
