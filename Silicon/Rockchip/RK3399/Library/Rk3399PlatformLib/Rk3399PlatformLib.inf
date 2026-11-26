@@ -37,6 +37,7 @@
   PcdLib
   RockchipBoardLib
   RockchipSocLib
+  SerialPortLib
 
 [FixedPcd]
   gArmTokenSpaceGuid.PcdSystemMemoryBase

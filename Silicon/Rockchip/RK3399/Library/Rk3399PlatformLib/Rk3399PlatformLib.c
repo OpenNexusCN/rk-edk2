@@ -17,6 +17,7 @@
 #include <Library/PcdLib.h>
 #include <Library/RockchipBoardLib.h>
 #include <Library/RockchipSocLib.h>
+#include <Library/SerialPortLib.h>
 #include <Ppi/ArmMpCoreInfo.h>
 
 #define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS  4
@@ -74,6 +75,14 @@ ArmPlatformInitialize (
 {
   RockchipSocEarlyInit ();
   RockchipBoardEarlyInit ();
+
+  /*
+   * PeilessSec calls SerialPortInitialize() later in SecMain. Initialize it
+   * here as well so early family/board DEBUG output (e.g. DRAM detection)
+   * reaches the UART instead of being dropped.
+   */
+  SerialPortInitialize ();
+
   return RETURN_SUCCESS;
 }
 
