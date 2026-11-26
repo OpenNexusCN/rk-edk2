@@ -58,7 +58,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             build-essential gcc-aarch64-linux-gnu nasm acpica-tools uuid-dev \
-            python3 device-tree-compiler mtools dosfstools ca-certificates
+            python3 device-tree-compiler mtools dosfstools xz-utils ca-certificates
 
       - name: Cache edk2 BaseTools
         uses: actions/cache@v4

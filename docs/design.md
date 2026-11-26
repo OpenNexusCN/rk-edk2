@@ -617,7 +617,7 @@ scripts/pack/make-sd-image.sh fmx1-pro-a
   4. `scripts/ci/build-board.sh <board>`；
   5. `scripts/gen-dtb.sh`、`scripts/pack/make-sd-image.sh`；
   6. 产物：`uefi-loader2.img`、`idbloader.img`、`trust.img`、`*.dtb`、
-     `*.img.gz`、`SHA256SUMS`、构建日志与 map。
+     `*.img.xz`、`SHA256SUMS`、构建日志与 map。
 - Job `release`（仅 tag）：汇总所有板卡产物，创建 Release。
 - 安全：Actions 固定到 commit SHA；`permissions` 最小化；
   release job 才申请 `contents: write`；不使用任何密钥。
@@ -628,7 +628,7 @@ scripts/pack/make-sd-image.sh fmx1-pro-a
 
 ```text
 rk-edk2-v<ver>-<board>.tar.gz        # 组件包（fd/loader2/dtb/idbloader/trust/README）
-rk-edk2-v<ver>-<board>-sd.img.gz     # 16MB TF 卡裸镜像
+rk-edk2-v<ver>-<board>-sd.img.xz     # 16MB TF 卡裸镜像
 README.txt
 SHA256SUMS
 build-<board>.log

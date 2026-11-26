@@ -53,8 +53,8 @@ cp "${TRUST}" "${PKG}/trust.img"
   "${PKG}/idbloader.img" "${PKG}/uefi-loader2.img" "${PKG}/trust.img" \
   "${PKG}/rk-edk2-v${VERSION}-${BOARD}-sd.img"
 
-gzip -9 -c "${PKG}/rk-edk2-v${VERSION}-${BOARD}-sd.img" \
-  > "${OUT_DIR}/rk-edk2-v${VERSION}-${BOARD}-sd.img.gz"
+xz -9 -T0 -c "${PKG}/rk-edk2-v${VERSION}-${BOARD}-sd.img" \
+  > "${OUT_DIR}/rk-edk2-v${VERSION}-${BOARD}-sd.img.xz"
 rm -f "${PKG}/rk-edk2-v${VERSION}-${BOARD}-sd.img"
 
 cat > "${PKG}/README.txt" <<EOF
@@ -73,13 +73,14 @@ uefi-loader2.img         loaderimage --uboot 打包后的 loader2
 ${DTB_NAME}              FMX1 设备树（P1 使用）
 idbloader.img            DDR + miniloader
 trust.img                BL31
-rk-edk2-v${VERSION}-${BOARD}-sd.img
-                         16MB 裸镜像（见下）
+rk-edk2-v${VERSION}-${BOARD}-sd.img.xz
+                         16MB 裸镜像（xz 压缩，见下）
 
 烧写到 TF 卡
 ------------
 方式一：整盘镜像
-  sudo dd if=rk-edk2-v${VERSION}-${BOARD}-sd.img of=/dev/sdX bs=4M conv=fsync
+  xz -dc rk-edk2-v${VERSION}-${BOARD}-sd.img.xz | \
+    sudo dd of=/dev/sdX bs=4M conv=fsync status=progress
   （/dev/sdX 是整张卡，不是分区；会清空卡上数据）
 
 方式二：分步写入（偏移单位：字节）

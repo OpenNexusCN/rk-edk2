@@ -9,12 +9,12 @@
 
 | 资产 | 用途 |
 |---|---|
-| `rk-edk2-v0.0.1-fmx1-pro-a-sd.img.gz` | 16MB 裸镜像，直接写 TF 卡 |
+| `rk-edk2-v0.0.1-fmx1-pro-a-sd.img.xz` | 16MB 裸镜像，直接写 TF 卡 |
 | `rk-edk2-v0.0.1-fmx1-pro-a.tar.gz` | 分组件包（fd/loader2/dtb/idbloader/trust/README） |
 | `SHA256SUMS` | 校验 |
 
 ```bash
-gzip -dc rk-edk2-v0.0.1-fmx1-pro-a-sd.img.gz | \
+xz -dc rk-edk2-v0.0.1-fmx1-pro-a-sd.img.xz | \
   sudo dd of=/dev/sdX bs=4M conv=fsync status=progress
 sync
 ```
