@@ -24,6 +24,15 @@ Rockchip RK 系列板卡的 EDK2 UEFI 固件，分层支持多 SoC / 多板卡�
 > P0 当前只包含 SEC/DXE/串口 Shell，尚无显示、存储、ACPI、USB。
 > 首次上板请按 [docs/bringup.md](docs/bringup.md) 执行。
 
+## 预编译固件
+
+GitHub Releases 提供按板卡打包的固件：
+
+- `v0.0.1`：FMX1 Pro A P0 串口预览版，含 16MB TF 卡裸镜像；
+- 刷写与串口观察步骤见 [docs/bringup.md](docs/bringup.md#0-使用-release-预编译包推荐)。
+
+发布由 tag 触发：`git tag vX.Y.Z && git push origin vX.Y.Z`。
+
 ## 文档
 
 - [设计文档](docs/design.md)

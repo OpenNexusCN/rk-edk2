@@ -414,9 +414,9 @@ BootROM
 | PCD | 值 | 说明 |
 |---|---|---|
 | `PcdFdBaseAddress` | `0x0020_0000` | loader2 载入地址 |
-| `PcdFdSize` | `0x0040_0000` | 4MB |
+| `PcdFdSize` | `0x000F_0000` | 960KB，受 `loaderimage --uboot` 的 `0xFF800` 限制 |
 | `PcdFvBaseAddress` | `0x0020_0000` | FV 压缩 |
-| `PcdFvSize` | `0x003F_0000` | 预留空间 |
+| `PcdFvSize` | `0x000F_0000` | 压缩后约 0.5MB；P1 增加模块后需改用 FIT 或其他打包方式 |
 
 首次不启用持久变量；阶段 3 再增加 FVB 区域（eMMC 保留区或专用分区），
 避免与 loader2/trust 分区冲突。
@@ -612,13 +612,11 @@ scripts/pack/make-sd-image.sh fmx1-pro-a
 ### 12.3 产物命名
 
 ```text
-rk3399-fmx1-pro-a_uefi-loader2.img
-rk3399-fmx1-pro-a_idbloader.img
-rk3399-fmx1-pro-a_trust.img
-rk3399-fmx1-pro-a.dtb
-rk3399-fmx1-pro-a_sd.img.gz
+rk-edk2-v<ver>-<board>.tar.gz        # 组件包（fd/loader2/dtb/idbloader/trust/README）
+rk-edk2-v<ver>-<board>-sd.img.gz     # 16MB TF 卡裸镜像
+README.txt
 SHA256SUMS
-flash-readme.txt
+build-<board>.log
 ```
 
 ---

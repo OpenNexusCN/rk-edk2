@@ -9,6 +9,8 @@
   RockchipBoardLib|Platform/Fmx/Fmx1Pro/Library/Fmx1ProBoardLib/Fmx1ProBoardLib.inf
 
 [PcdsFixedAtBuild.common]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"rk-edk2 0.0.1"
+
   # Console: UART2 @ 1500000 8N1
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0xFF1A0000
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate|1500000
@@ -23,11 +25,12 @@
   gArmTokenSpaceGuid.PcdSystemMemoryBase|0x00000000
   gArmTokenSpaceGuid.PcdSystemMemorySize|0xF8000000
 
-  # Firmware volume: loader2 at 8MB, 4MB region.
+  # Firmware volume: loader2 at 8MB. loaderimage --uboot is limited to
+  # 0xFF800 bytes, so the FD stays at 0xF0000 (the compressed FV is ~0.5MB).
   gArmTokenSpaceGuid.PcdFdBaseAddress|0x00200000
-  gArmTokenSpaceGuid.PcdFdSize|0x00400000
+  gArmTokenSpaceGuid.PcdFdSize|0x000F0000
   gArmTokenSpaceGuid.PcdFvBaseAddress|0x00200000
-  gArmTokenSpaceGuid.PcdFvSize|0x003F0000
+  gArmTokenSpaceGuid.PcdFvSize|0x000F0000
 
   # Both ACPI and DT tables are installed; the OS picks.
   gRockchipTokenSpaceGuid.PcdConfigTableMode|2

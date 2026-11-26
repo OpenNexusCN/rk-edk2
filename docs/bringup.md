@@ -3,7 +3,28 @@
 > P0 已完成本地构建（edk2-stable202608 / GCC / DEBUG），**尚未在 FMX1 实机验证**。
 > 本文记录首次上板的打包、烧写与观察步骤。
 
-## 1. 构建产物
+## 0. 使用 Release 预编译包（推荐）
+
+从 GitHub Releases 下载 `v0.0.1`：
+
+| 资产 | 用途 |
+|---|---|
+| `rk-edk2-v0.0.1-fmx1-pro-a-sd.img.gz` | 16MB 裸镜像，直接写 TF 卡 |
+| `rk-edk2-v0.0.1-fmx1-pro-a.tar.gz` | 分组件包（fd/loader2/dtb/idbloader/trust/README） |
+| `SHA256SUMS` | 校验 |
+
+```bash
+gzip -dc rk-edk2-v0.0.1-fmx1-pro-a-sd.img.gz | \
+  sudo dd of=/dev/sdX bs=4M conv=fsync status=progress
+sync
+```
+
+> `/dev/sdX` 必须是整张 TF 卡，不是分区；该镜像没有分区表，会清空卡上数据。
+> 这是 P0 固件，**不能启动 GRUB/Ubuntu/Windows**。
+
+串口按第 4 节连接，上电观察。
+
+## 1. 从源码构建
 
 ```bash
 scripts/build.sh fmx1-pro-a DEBUG

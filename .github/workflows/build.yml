@@ -83,16 +83,19 @@ jobs:
       - name: Generate DTB
         run: scripts/gen-dtb.sh "${{ matrix.board }}" "out/${{ matrix.board }}"
 
-      - name: Collect artifacts
+      - name: Package release
         run: |
           source "configs/boards/${{ matrix.board }}.conf"
           set -euo pipefail
-          OUT="artifacts/${BOARD_ID}"
-          mkdir -p "${OUT}"
-          cp "Build/$(basename "${DSC}" .dsc)/DEBUG_GCC/FV/"*.fd "${OUT}/" 2>/dev/null || true
-          cp "out/${BOARD_ID}/${DTB_NAME}" "${OUT}/"
-          cp "build-${BOARD_ID}.log" "${OUT}/"
-          ( cd "${OUT}" && sha256sum * > SHA256SUMS )
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION="dev-${GITHUB_SHA:0:8}"
+          fi
+          scripts/pack/make-release.sh "${BOARD_ID}" "${VERSION}" "artifacts/${BOARD_ID}"
+          cp "build-${BOARD_ID}.log" "artifacts/${BOARD_ID}/"
+          ( cd "artifacts/${BOARD_ID}" && sha256sum * > SHA256SUMS )
+          cat "artifacts/${BOARD_ID}/SHA256SUMS"
 
       - name: Upload firmware
         uses: actions/upload-artifact@v4
@@ -118,7 +121,20 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          mapfile -t FILES < <(find artifacts -type f | sort)
+          {
+            echo "# rk-edk2 ${GITHUB_REF_NAME}"
+            echo
+            find artifacts -name RELEASE_NOTES.md -exec cat {} \;
+          } > /tmp/notes.md
+
+          mapfile -t FILES < <(find artifacts -type f \
+            ! -name RELEASE_NOTES.md ! -name SHA256SUMS | sort)
+          ( cd artifacts && find . -type f \
+              ! -name RELEASE_NOTES.md ! -name SHA256SUMS \
+              -exec sha256sum {} \; | \
+              awk '{n=split($2,p,"/"); print $1"  "p[n]}' | sort -k2 ) \
+            > /tmp/SHA256SUMS
+          FILES+=(/tmp/SHA256SUMS)
           gh release create "${GITHUB_REF_NAME}" "${FILES[@]}" \
-            --title "${GITHUB_REF_NAME}" \
-            --generate-notes
+            --title "rk-edk2 ${GITHUB_REF_NAME}" \
+            --notes-file /tmp/notes.md
