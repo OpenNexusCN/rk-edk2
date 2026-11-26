@@ -141,5 +141,6 @@ jobs:
             > /tmp/SHA256SUMS
           FILES+=(/tmp/SHA256SUMS)
           gh release create "${GITHUB_REF_NAME}" "${FILES[@]}" \
+            --repo "${GITHUB_REPOSITORY}" \
             --title "rk-edk2 ${GITHUB_REF_NAME}" \
             --notes-file /tmp/notes.md
