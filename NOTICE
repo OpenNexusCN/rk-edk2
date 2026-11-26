@@ -1,0 +1,28 @@
+# NOTICE
+
+本仓库包含不同许可证的代码与二进制：
+
+## 本项目新增代码
+
+`Silicon/`、`Platform/`、`scripts/`、`docs/` 下的新增代码：
+BSD-2-Clause-Patent，见 `LICENSE`。
+
+## 移植/参考代码
+
+以下来源的代码以各自许可证分发，文件头保留原始声明：
+
+- `andreiw/rk3399-edk2`（`demo/upstream/rk3399-edk2`）：
+  GPL-2.0（显示/HDMI/EDID、DW MMC、部分平台代码）与 BSD-3-Clause（其他文件）。
+- Linux 内核（`demo/soc/rk3399` 设备树、`demo/boards/*` DTS）：
+  GPL-2.0+ OR MIT（DTS），GPL-2.0（驱动程序参考）。
+- `edk2-porting/edk2-rk3588` / Rockchip `edk2-rockchip`（架构参考）：
+  BSD-2-Clause-Patent。
+- tianocore/edk2（子模块）：BSD-2-Clause-Patent，见 `edk2/License.txt`。
+
+> 由于最终固件包含 GPL-2.0 代码（VOP/HDMI 等），二进制整体按 GPL-2.0
+> 兼容方式分发。若需要纯 BSD 固件，必须重写相应模块。
+
+## 二进制 blob
+
+`demo/blobs/rkbin/` 下的 Rockchip 启动二进制（DDR/miniloader/BL31/BL32）
+按 `demo/blobs/rkbin/LICENSE` 分发，版权归 Rockchip Electronics Co., Ltd.。

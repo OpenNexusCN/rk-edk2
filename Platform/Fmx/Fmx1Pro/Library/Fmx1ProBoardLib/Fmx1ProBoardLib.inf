@@ -1,0 +1,31 @@
+## @file
+#  FMX1 Pro board library (RockchipBoardLib)
+#
+#  Copyright (c) 2026, OpenNexusCN contributors
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = Fmx1ProBoardLib
+  FILE_GUID                      = 8a4c1e63-2d5f-4a7b-9c80-4d5e6f7a8b9c
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = RockchipBoardLib
+
+[Sources]
+  Fmx1ProBoardLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/Rockchip/RockchipPkg.dec
+  Silicon/Rockchip/RK3399/RK3399.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  PcdLib
+  RockchipSocLib
+
+[FixedPcd]
+  gRockchipTokenSpaceGuid.PcdBoardVariant

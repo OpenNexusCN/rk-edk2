@@ -1,0 +1,40 @@
+# 参考代码来源锁定
+
+更新时间：2026-11-26
+
+| 项目 | 来源 | Commit / Tag |
+|---|---|---|
+| 内核设备树 | OpenNexusCN/rk-linux-6.18.y | `2f2d44cad9b8f12b5e5dbe0cc1798ce72f322d20` |
+| 启动二进制 | OpenNexusCN/rkbin | `3e288fe814e059dd06833495f845cab04ac20a5c` |
+| 板配置 | OpenNexusCN/one-kvm-build | `7abf468771b26cd2e80d65127763efeca96834a3` |
+| 工具集 | OpenNexusCN/rk-tools | `9db233b31104e1251463d90ad9baea55625b256a` (v1.0.0) |
+| 参考固件 | andreiw/rk3399-edk2 | `bfe5d38aea3ec8a35329558cbd0e68fce669e523` |
+| edk2 基线 | tianocore/edk2 | `edk2-stable202608`（子模块锁定） |
+
+## demo/blobs/rkbin
+
+| 文件 | 说明 | 许可证 |
+|---|---|---|
+| `rk33/rk3399_ddr_800MHz_v1.30.bin` | DDR 初始化 | Rockchip rkbin LICENSE |
+| `rk33/rk3399_miniloader_v1.30.bin` | miniloader | 同上 |
+| `rk33/rk3399_usbplug_v1.30.bin` | MaskROM USB 插件 | 同上 |
+| `rk33/rk3399_bl31_v1.36.elf` | TF-A BL31 | 同上 |
+| `rk33/rk3399_bl32_v2.12.bin` | OP-TEE BL32（默认不启用） | 同上 |
+| `RKBOOT/RK3399MINIALL.ini` | idbloader 合成配置 | 同上 |
+| `RKTRUST/RK3399TRUST.ini` | trust.img 合成配置（含 BL32） | 同上 |
+| `RK3399_NO_BL32.ini` | trust.img 合成配置（仅 BL31） | 同上 |
+
+许可证全文见 `blobs/rkbin/LICENSE`。
+
+## demo/upstream/rk3399-edk2
+
+GPL-2.0 / BSD-3-Clause 混合，文件头保留原始声明。该快照仅作参考，不参与编译。
+
+## 更新方式
+
+更新任一参考代码时：
+
+1. 从对应仓库导出新版本到本目录；
+2. 更新本文件的 commit；
+3. 同步更新 `boards/*/hardware.md` 中受影响的硬件描述；
+4. 运行 `scripts/gen-dtb.sh` 确认 DTS 仍可编译。

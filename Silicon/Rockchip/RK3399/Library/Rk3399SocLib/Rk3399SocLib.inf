@@ -1,0 +1,34 @@
+## @file
+#  RK3399 RockchipSocLib implementation
+#
+#  Copyright (c) 2026, OpenNexusCN contributors
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = Rk3399SocLib
+  FILE_GUID                      = 2e6b8c41-9a3d-4f5e-b170-2c3d4e5f6a7b
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = RockchipSocLib
+
+[Sources]
+  Rk3399SocLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/Rockchip/RockchipPkg.dec
+  Silicon/Rockchip/RK3399/RK3399.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  IoLib
+  PcdLib
+
+[FixedPcd]
+  gRK3399TokenSpaceGuid.PcdRk3399GrfBase
+  gRK3399TokenSpaceGuid.PcdRk3399PmuGrfBase
+  gRK3399TokenSpaceGuid.PcdRk3399DramSizeOverride

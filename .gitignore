@@ -1,0 +1,27 @@
+# 构建产物
+Build/
+Conf/
+out/
+*.o
+*.d
+*.map
+*.efi
+*.fd
+*.aml
+*.dtb
+*.img
+
+# 外部依赖（由脚本/子模块获取）
+/edk2/
+/.deps/
+
+# 本地参考 checkout（带 .git），可提交的快照在 demo/upstream/
+/demo/rk3399-edk2/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+
+# CI build logs
+build-*.log

@@ -1,0 +1,33 @@
+## @file
+#  Rockchip RK3399 SoC package
+#
+#  Copyright (c) 2026, OpenNexusCN contributors
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  DEC_SPECIFICATION              = 0x0001001A
+  PACKAGE_NAME                   = RK3399
+  PACKAGE_GUID                   = 7c1e5a90-4b2d-4f6e-8a3c-5d7e9f1b2c40
+  PACKAGE_VERSION                = 0.1
+
+[Includes.common]
+  Include
+
+[Guids.common]
+  gRK3399TokenSpaceGuid          = { 0x9a3d7e21, 0x4c5b, 0x4e6f, { 0x8a, 0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde } }
+
+[PcdsFixedAtBuild.common]
+  # Register bases
+  gRK3399TokenSpaceGuid.PcdRk3399GrfBase|0xFF770000|UINT32|0x00000001
+  gRK3399TokenSpaceGuid.PcdRk3399PmuGrfBase|0xFF320000|UINT32|0x00000002
+  gRK3399TokenSpaceGuid.PcdRk3399CruBase|0xFF760000|UINT32|0x00000003
+  gRK3399TokenSpaceGuid.PcdRk3399PmuCruBase|0xFF750000|UINT32|0x00000004
+
+  # CPU / DRAM
+  gRK3399TokenSpaceGuid.PcdRk3399CpuCount|6|UINT32|0x00000010
+  gRK3399TokenSpaceGuid.PcdRk3399DramSizeOverride|0|UINT64|0x00000011
+
+  # UART2 console (FMX1 default)
+  gRK3399TokenSpaceGuid.PcdRk3399Uart2Base|0xFF1A0000|UINT64|0x00000020
+  gRK3399TokenSpaceGuid.PcdRk3399Uart2Index|2|UINT32|0x00000021

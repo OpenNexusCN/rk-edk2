@@ -1,0 +1,36 @@
+## @file
+#  DesignWare APB UART SerialPortLib
+#
+#  Copyright (c) 2026, OpenNexusCN contributors
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = Dw8250SerialPortLib
+  FILE_GUID                      = 4d8f2a61-7c3b-4e5d-9f80-1a2b3c4d5e6f
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = SerialPortLib
+
+[Sources]
+  Dw8250SerialPortLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/Rockchip/RockchipPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  IoLib
+  PcdLib
+
+[FixedPcd]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultDataBits
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultParity
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultStopBits
+  gRockchipTokenSpaceGuid.PcdUartClockInHz

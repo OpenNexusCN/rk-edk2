@@ -1,0 +1,27 @@
+## @file
+#  Rockchip common package
+#
+#  Copyright (c) 2026, OpenNexusCN contributors
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  DEC_SPECIFICATION              = 0x0001001A
+  PACKAGE_NAME                   = RockchipPkg
+  PACKAGE_GUID                   = 8f6a1c2e-3b4d-4e5f-9a70-1c2d3e4f5a60
+  PACKAGE_VERSION                = 0.1
+
+[Includes.common]
+  Include
+
+[Guids.common]
+  gRockchipTokenSpaceGuid        = { 0x4b7e9a10, 0x2c3d, 0x4e5f, { 0x8a, 0x91, 0x02, 0x13, 0x24, 0x35, 0x46, 0x57 } }
+
+[Protocols.common]
+  gRockchipPlatformProtocolGuid  = { 0x2d9e4b71, 0x5a6c, 0x4d8e, { 0x9f, 0x10, 0x21, 0x32, 0x43, 0x54, 0x65, 0x76 } }
+
+[PcdsFixedAtBuild.common]
+  # Board identity / behaviour
+  gRockchipTokenSpaceGuid.PcdBoardVariant|0|UINT32|0x00000001
+  gRockchipTokenSpaceGuid.PcdConfigTableMode|0|UINT32|0x00000002
+  gRockchipTokenSpaceGuid.PcdUartClockInHz|24000000|UINT32|0x00000003

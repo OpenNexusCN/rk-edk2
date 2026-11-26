@@ -1,0 +1,61 @@
+## @file
+#  Volatile (RAM-backed) UEFI variable services.
+#
+#  Vendored from edk2-stable201808 (MdeModulePkg/Universal/Variable/EmuRuntimeDxe)
+#  because modern edk2 removed the out-of-tree emulation driver. It is used
+#  until RkFvbDxe provides a persistent store on eMMC.
+#
+#  Copyright (c) 2006 - 2018, Intel Corporation. All rights reserved.
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = EmuVariableRuntimeDxe
+  FILE_GUID                      = 02B01AD5-7E59-43e8-A6D8-238180613A5A
+  MODULE_TYPE                    = DXE_RUNTIME_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = VariableServiceInitialize
+
+[Sources]
+  InitVariable.c
+  EmuVariable.c
+  Variable.h
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  HobLib
+  MemoryAllocationLib
+  PcdLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  UefiRuntimeLib
+
+[Protocols]
+  gEfiVariableArchProtocolGuid
+  gEfiVariableWriteArchProtocolGuid
+
+[Guids]
+  gEfiEventVirtualAddressChangeGuid
+  gEfiGlobalVariableGuid
+  gEfiVariableGuid
+
+[Pcd]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdEmuVariableNvStoreReserved
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxHardwareErrorVariableSize
+  gEfiMdeModulePkgTokenSpaceGuid.PcdVariableStoreSize
+  gEfiMdeModulePkgTokenSpaceGuid.PcdHwErrStorageSize
+
+[FeaturePcd]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdVariableCollectStatistics
+
+[Depex]
+  TRUE

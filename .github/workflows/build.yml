@@ -1,0 +1,124 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: matrix
+        name: Build board matrix
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import glob, json
+          boards = []
+          for path in sorted(glob.glob('configs/boards/*.conf')):
+              conf = {}
+              with open(path, encoding='utf-8') as f:
+                  for line in f:
+                      line = line.strip()
+                      if not line or line.startswith('#') or '=' not in line:
+                          continue
+                      key, value = line.split('=', 1)
+                      conf[key.strip()] = value.strip().strip('"')
+              if conf.get('ENABLED', 'false').lower() != 'true':
+                  continue
+              boards.append({
+                  'board': conf['BOARD_ID'],
+                  'name': conf['BOARD_NAME'],
+                  'dsc': conf['DSC'],
+                  'dtb': conf['DTB_NAME'],
+              })
+          print('matrix=' + json.dumps({'include': boards}, separators=(',', ':')))
+          PY
+          cat "$GITHUB_OUTPUT"
+
+  build:
+    needs: prepare
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential gcc-aarch64-linux-gnu nasm acpica-tools uuid-dev \
+            python3 device-tree-compiler mtools dosfstools ca-certificates
+
+      - name: Cache edk2 BaseTools
+        uses: actions/cache@v4
+        with:
+          path: edk2/BaseTools/Source/C/bin
+          key: basetools-${{ runner.os }}-edk2-stable202608-${{ hashFiles('scripts/ci/setup.sh') }}
+
+      - name: Prepare edk2
+        run: scripts/ci/setup.sh
+
+      - name: Build ${{ matrix.name }}
+        run: |
+          source "configs/boards/${{ matrix.board }}.conf"
+          export PACKAGES_PATH="$PWD:$PWD/edk2"
+          export GCC_AARCH64_PREFIX=aarch64-linux-gnu-
+          export WORKSPACE="$PWD"
+          export PYTHON_COMMAND=python3
+          source edk2/edksetup.sh BaseTools >/dev/null
+          build -a AARCH64 -t GCC -b DEBUG -n "$(nproc)" -p "${DSC}" \
+            2>&1 | tee "build-${BOARD_ID}.log"
+
+      - name: Generate DTB
+        run: scripts/gen-dtb.sh "${{ matrix.board }}" "out/${{ matrix.board }}"
+
+      - name: Collect artifacts
+        run: |
+          source "configs/boards/${{ matrix.board }}.conf"
+          set -euo pipefail
+          OUT="artifacts/${BOARD_ID}"
+          mkdir -p "${OUT}"
+          cp "Build/$(basename "${DSC}" .dsc)/DEBUG_GCC/FV/"*.fd "${OUT}/" 2>/dev/null || true
+          cp "out/${BOARD_ID}/${DTB_NAME}" "${OUT}/"
+          cp "build-${BOARD_ID}.log" "${OUT}/"
+          ( cd "${OUT}" && sha256sum * > SHA256SUMS )
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-${{ matrix.board }}
+          path: artifacts/${{ matrix.board }}
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: false
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mapfile -t FILES < <(find artifacts -type f | sort)
+          gh release create "${GITHUB_REF_NAME}" "${FILES[@]}" \
+            --title "${GITHUB_REF_NAME}" \
+            --generate-notes

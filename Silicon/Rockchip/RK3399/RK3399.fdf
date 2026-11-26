@@ -1,0 +1,70 @@
+## @file
+#  RK3399 UEFI flash device.
+#
+#  Copyright (c) 2026, OpenNexusCN contributors
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[FD.RK3399_UEFI]
+BaseAddress   = 0x00200000|gArmTokenSpaceGuid.PcdFdBaseAddress
+Size          = 0x00400000|gArmTokenSpaceGuid.PcdFdSize
+ErasePolarity = 1
+
+BlockSize     = 0x00001000
+NumBlocks     = 0x400
+
+0x00000000|0x003F0000
+gArmTokenSpaceGuid.PcdFvBaseAddress|gArmTokenSpaceGuid.PcdFvSize
+FV = FVMAIN_COMPACT
+
+[FV.FVMAIN]
+FvNameGuid         = 0bd7e9b5-d027-42ff-bf57-fc229fa49686
+BlockSize          = 0x40
+NumBlocks          = 0
+FvAlignment        = 8
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+
+!include $(RK_PLATFORM_FVMAIN_MODULES)
+
+[FV.FVMAIN_COMPACT]
+FvNameGuid         = 5b8a2c47-1d3e-4f60-9a7b-2c4d5e6f7a8b
+FvAlignment        = 8
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+
+  INF ArmPlatformPkg/PeilessSec/PeilessSec.inf
+
+  FILE FV_IMAGE = 9E21FD93-9C72-4c15-8C4B-E77F1DB2D792 {
+    SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF PROCESSING_REQUIRED = TRUE {
+      SECTION FV_IMAGE = FVMAIN
+    }
+  }
+
+!include Silicon/Rockchip/FvRules.fdf.inc
