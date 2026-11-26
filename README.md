@@ -15,11 +15,14 @@ Rockchip RK 系列板卡的 EDK2 UEFI 固件，分层支持多 SoC / 多板卡�
 
 | 阶段 | 内容 | 状态 |
 |---|---|---|
-| P0 | 仓库骨架、参考归档、RK3399 平台库、串口控制台、CI | 进行中 |
+| P0 | 仓库骨架、参考归档、RK3399 平台库、串口控制台、CI | ✅ 构建通过，待硬件验证 |
 | P1 | HDMI/GOP、TF 卡启动、ACPI/DT、RTC、Ubuntu 安装/启动 | 计划 |
 | P2 | eMMC、USB、持久变量、B 版 | 计划 |
 | P3 | 网络、Setup、Capsule、多 SoC | 计划 |
 | P4 | Windows arm64 启动/安装探索（驱动缺口需单独评估） | 探索 |
+
+> P0 当前只包含 SEC/DXE/串口 Shell，尚无显示、存储、ACPI、USB。
+> 首次上板请按 [docs/bringup.md](docs/bringup.md) 执行。
 
 ## 文档
 
